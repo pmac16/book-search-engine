@@ -40,38 +40,40 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    
-    },
-    saveBook: async (parent, { bookData }, context) => {
-      if (context.user) {
-        const updateUser = await User.findOneAndUpdate(
-          { _id: context.user._id },
-          {
-            $push: {
-              savedBooks: { bookData },
-            },
+  },
+  saveBook: async (parent, { bookData }, context) => {
+    if (context.user) {
+      const updateUser = await User.findOneAndUpdate(
+        { _id: context.user._id },
+        {
+          $push: {
+            savedBooks: { bookData },
           },
-          { new: true, runValidators: true }
-        );
+        },
+        { new: true, runValidators: true }
+      );
 
-        return updateUser;
-      }
+      return updateUser;
+    }
 
-      throw new AuthenticationError("You need to be logged in!");
-    },
-    addFriend: async (parent, { friendId }, context) => {
-      if (context.user) {
-        const updatedUser = await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { friends: friendId } },
-          { new: true }
-        ).populate("friends");
+    throw new AuthenticationError("You need to be logged in!");
+  },
+  saveBook: async (parent, { bookId }, context) => {
+    if (context.user) {
+      const updateUser = await User.findOneAndUpdate(
+        { _id: context.user._id },
+        {
+          $pull: {
+            savedBooks: { bookId },
+          },
+        },
+        { new: true, runValidators: true }
+      );
 
-        return updatedUser;
-      }
+      return updateUser;
+    }
 
-      throw new AuthenticationError("You need to be logged in!");
-    },
+    throw new AuthenticationError("You need to be logged in!");
   },
 };
 
