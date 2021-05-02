@@ -1,12 +1,14 @@
 const jwt = require("jsonwebtoken");
-require("dotenv");
+require("dotenv").config();
 // set token secret and expiration date
 const secret = process.env.SECRET;
+console.log({ secret });
+console.log("I am in the auth file");
 const expiration = "2h";
 
 module.exports = {
   // function for our authenticated routes
-  authMiddleware: function (req) {
+  authMiddleware: function ({ req }) {
     // allows token to be sent via  req.query or headers
     let token = req.body.token || req.query.token || req.headers.authorization;
 
@@ -16,7 +18,7 @@ module.exports = {
     }
 
     if (!token) {
-      return req;
+      return { message: "You have no token!" };
     }
 
     // verify token and get user data out of it
