@@ -2,8 +2,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 // set token secret and expiration date
 const secret = process.env.SECRET;
-console.log({ secret });
-console.log("I am in the auth file");
 const expiration = "2h";
 
 module.exports = {

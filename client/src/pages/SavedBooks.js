@@ -8,23 +8,19 @@ import {
 } from "react-bootstrap";
 
 // import { getMe, deleteBook } from "../utils/API";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { QUERY_ME } from "../utils/queries.js";
 import Auth from "../utils/auth";
 import { removeBookId } from "../utils/localStorage";
 import { REMOVE_BOOK } from "../utils/mutations.js";
-import { useMutation } from "@apollo/react-hooks";
 
 const SavedBooks = () => {
   // use this to determine if `useEffect()` hook needs to run again
   const { loading, data } = useQuery(QUERY_ME);
-  console.log(loading, data);
   const userData = data?.me || {};
 
   const userDataLength = Object.keys(userData).length;
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
-
-  console.log(data);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -42,6 +38,7 @@ const SavedBooks = () => {
       const { data } = await removeBook({
         variables: { bookId },
       });
+
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
